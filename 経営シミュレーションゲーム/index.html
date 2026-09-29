@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="theme-color" content="#1b2340">
+  <title>ピクセル商店街 繁盛記</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ===== タイトル画面 ===== -->
+    <section id="title-screen" class="screen">
+      <div class="title-sky"></div>
+      <div class="title-inner">
+        <p class="title-sub">経営シミュレーション</p>
+        <h1 class="title-logo"><span>ピクセル商店街</span><span class="logo-2">繁盛記</span></h1>
+        <canvas id="title-canvas" width="176" height="48"></canvas>
+        <div class="title-buttons">
+          <button class="btn btn-big" data-action="title-new">はじめから</button>
+          <button class="btn btn-big" data-action="title-continue" id="btn-continue">つづきから</button>
+          <button class="btn" data-action="title-import">セーブデータを読み込む</button>
+        </div>
+        <p class="title-credit">made by <a href="https://github.com/h1ro223" target="_blank" rel="noopener">hiro/ヒロ</a></p>
+      </div>
+    </section>
+
+    <!-- ===== ゲーム画面 ===== -->
+    <section id="game-screen" class="screen hidden">
+      <header id="hud">
+        <div class="hud-row">
+          <div class="hud-money" id="hud-money">¥0</div>
+          <div class="hud-date" id="hud-date">1年目 4月 1日(月)</div>
+          <div class="hud-speed">
+            <button class="spd" data-speed="0" aria-label="一時停止">Ⅱ</button>
+            <button class="spd" data-speed="1" aria-label="等速">▶</button>
+            <button class="spd" data-speed="2" aria-label="2倍速">▶▶</button>
+            <button class="spd" data-speed="4" aria-label="4倍速">▶▶▶</button>
+          </div>
+        </div>
+        <div class="hud-row hud-row2">
+          <div class="hud-chip" id="hud-time">6:00</div>
+          <div class="hud-chip" id="hud-weather">晴れ</div>
+          <div class="hud-chip" id="hud-rank">寂れた通り</div>
+          <div class="hud-chip" id="hud-pop">人気 0</div>
+          <div class="hud-chip" id="hud-guests">客 0</div>
+          <div class="hud-chip" id="hud-rp">RP 0</div>
+          <a class="hud-credit" href="https://github.com/h1ro223" target="_blank" rel="noopener">made by hiro/ヒロ</a>
+        </div>
+      </header>
+
+      <div id="ticker"><div id="ticker-text"></div></div>
+
+      <div id="game-wrap">
+        <canvas id="game"></canvas>
+        <div id="event-banner" class="hidden"></div>
+        <div id="mode-bar" class="hidden">
+          <span id="mode-text"></span>
+          <button class="btn btn-small" data-action="mode-cancel">終了</button>
+        </div>
+        <div id="confirm-bar" class="hidden">
+          <span id="confirm-text"></span>
+          <button class="btn btn-ok" data-action="confirm-build">建てる</button>
+          <button class="btn btn-small" data-action="confirm-cancel">やめる</button>
+        </div>
+        <div id="zoom-ctrl">
+          <button class="btn btn-icon" data-action="zoom-in" aria-label="拡大">＋</button>
+          <button class="btn btn-icon" data-action="zoom-out" aria-label="縮小">－</button>
+          <button class="btn btn-icon" data-action="zoom-fit" aria-label="全体表示">□</button>
+        </div>
+        <aside id="info-panel" class="hidden"></aside>
+      </div>
+
+      <nav id="toolbar">
+        <button class="tool" data-action="open-build"><img alt="" data-icon="hammer"><span>建設</span></button>
+        <button class="tool" data-action="open-staff"><img alt="" data-icon="staff"><span>スタッフ</span></button>
+        <button class="tool" data-action="open-research"><img alt="" data-icon="flask"><span>研究</span></button>
+        <button class="tool" data-action="open-ads"><img alt="" data-icon="mega"><span>宣伝</span></button>
+        <button class="tool" data-action="open-goals"><img alt="" data-icon="flag"><span>目標</span><i class="badge hidden" id="badge-goals"></i></button>
+        <button class="tool" data-action="open-finance"><img alt="" data-icon="chart"><span>経営</span></button>
+        <button class="tool" data-action="open-menu"><img alt="" data-icon="gear"><span>メニュー</span></button>
+      </nav>
+
+      <!-- 建設シート -->
+      <div id="build-sheet" class="sheet hidden">
+        <div class="sheet-head">
+          <div class="sheet-tabs" id="build-tabs"></div>
+          <button class="btn btn-icon" data-action="close-build" aria-label="閉じる">✕</button>
+        </div>
+        <div class="sheet-body" id="build-list"></div>
+      </div>
+    </section>
+
+    <!-- ===== モーダル ===== -->
+    <div id="modal" class="modal hidden">
+      <div class="modal-box">
+        <div class="modal-head">
+          <h2 id="modal-title"></h2>
+          <button class="btn btn-icon" data-action="modal-close" aria-label="閉じる">✕</button>
+        </div>
+        <div class="modal-body" id="modal-body"></div>
+      </div>
+    </div>
+
+    <div id="toasts"></div>
+    <div id="fade" class="hidden"></div>
+    <input type="file" id="import-file" accept=".txt,.json" hidden>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>

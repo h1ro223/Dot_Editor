@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#1a1236">
+  <meta name="description" content="DOT RUMBLE（ドットランブル）- ドット絵で遊ぶ3vs3アリーナバトル。スマホ・PC対応。made by hiro/ヒロ">
+  <title>DOT RUMBLE｜ドットランブル</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body data-screen="home">
+  <canvas id="game" aria-label="ゲーム画面"></canvas>
+
+  <!-- ===== 試合中HUD ===== -->
+  <div id="hud" class="hidden">
+    <button id="pauseBtn" class="px-btn icon-btn" aria-label="一時停止">II</button>
+    <div class="hud-top">
+      <div id="scoreBoard" class="scoreboard"></div>
+      <div id="timer" class="timer"></div>
+    </div>
+    <div id="killfeed" class="killfeed"></div>
+    <div id="centerMsg" class="center-msg"><div id="cmMain"></div><div id="cmSub"></div></div>
+    <div id="pcHint" class="pc-hint">WASD 移動 ／ クリック 攻撃 ／ 右クリック長押し・E スーパー ／ Q オート攻撃 ／ Esc 一時停止</div>
+  </div>
+
+  <!-- ===== ホーム ===== -->
+  <section id="home" class="screen show">
+    <header class="topbar">
+      <div class="chip trophy-chip"><img class="px chip-ico" src="data:," alt="" id="chipTrophyIco"><b id="totalTrophy">0</b></div>
+      <div class="topbar-right">
+        <button class="px-btn icon-btn" data-open="howto" aria-label="遊び方">？</button>
+        <button class="px-btn icon-btn" data-open="settings" aria-label="設定">⚙</button>
+      </div>
+    </header>
+
+    <div class="home-main">
+      <div class="logo-wrap">
+        <h1 class="logo"><span>DOT</span><span>RUMBLE</span></h1>
+        <p class="tagline">ドット絵の3vs3アリーナバトル</p>
+      </div>
+      <div class="showcase">
+        <div class="sc-stage">
+          <canvas id="scCanvas" class="px" width="64" height="64"></canvas>
+          <div class="pedestal"></div>
+        </div>
+        <div class="sc-info">
+          <div class="sc-name" id="scName">リオ</div>
+          <div class="sc-meta"><span id="scRole">アサルト</span><span id="scTrophy" class="sc-trophy"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-actions">
+      <button class="px-btn menu-btn" id="btnBrawler">
+        <img class="px mb-ico" id="curBrawlerIco" src="data:," alt="">
+        <span class="mb-text"><small>キャラ</small><b id="curBrawler">リオ</b></span>
+      </button>
+      <button class="px-btn menu-btn" id="btnMode">
+        <img class="px mb-ico" id="curModeIco" src="data:," alt="">
+        <span class="mb-text"><small>モード</small><b id="curMode">ジェムラッシュ</b></span>
+      </button>
+      <button class="px-btn play-btn" id="btnPlay">バトル開始</button>
+    </div>
+
+    <footer class="credit">made by <a href="https://github.com/h1ro223" target="_blank" rel="noopener">hiro/ヒロ</a></footer>
+  </section>
+
+  <!-- ===== キャラ選択 ===== -->
+  <section id="brawlers" class="screen">
+    <header class="sub-head">
+      <button class="px-btn back-btn" data-back>戻る</button>
+      <h2>キャラ選択</h2>
+    </header>
+    <div class="br-layout">
+      <div id="brawlerGrid" class="br-grid"></div>
+      <div class="br-detail panel">
+        <div class="bd-top">
+          <canvas id="bdCanvas" class="px" width="64" height="64"></canvas>
+          <div>
+            <div class="bd-name" id="bdName"></div>
+            <div class="bd-meta"><span id="bdRole"></span><span id="bdTrophy" class="sc-trophy"></span></div>
+          </div>
+        </div>
+        <p class="bd-desc" id="bdDesc"></p>
+        <div class="bd-stats" id="bdStats"></div>
+        <div class="bd-skill"><span class="skill-tag">攻撃</span><div id="bdAtk"></div></div>
+        <div class="bd-skill"><span class="skill-tag super">スーパー</span><div id="bdSup"></div></div>
+        <button class="px-btn play-btn small" id="bdSelect">このキャラにする</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== モード選択 ===== -->
+  <section id="modes" class="screen">
+    <header class="sub-head">
+      <button class="px-btn back-btn" data-back>戻る</button>
+      <h2>モード選択</h2>
+    </header>
+    <div id="modeGrid" class="mode-grid"></div>
+  </section>
+
+  <!-- ===== 設定 ===== -->
+  <section id="settings" class="screen">
+    <header class="sub-head">
+      <button class="px-btn back-btn" data-back>戻る</button>
+      <h2>設定</h2>
+    </header>
+    <div class="panel narrow">
+      <div class="set-row">
+        <span class="set-label">敵の強さ</span>
+        <div id="diffSeg" class="seg">
+          <button class="px-btn" data-diff="easy">かんたん</button>
+          <button class="px-btn" data-diff="normal">ふつう</button>
+          <button class="px-btn" data-diff="hard">むずかしい</button>
+        </div>
+      </div>
+      <label class="set-row"><span class="set-label">BGM</span><input type="range" id="volBgm" min="0" max="100"></label>
+      <label class="set-row"><span class="set-label">効果音</span><input type="range" id="volSe" min="0" max="100"></label>
+      <label class="set-row toggle"><span class="set-label">画面の揺れ</span><input type="checkbox" id="optShake"><i></i></label>
+      <label class="set-row toggle"><span class="set-label">照準ガイド（PC）</span><input type="checkbox" id="optGuide"><i></i></label>
+      <div class="set-row"><span class="set-label">データ</span><button class="px-btn danger" id="resetData">トロフィーをリセット</button></div>
+    </div>
+  </section>
+
+  <!-- ===== 遊び方 ===== -->
+  <section id="howto" class="screen">
+    <header class="sub-head">
+      <button class="px-btn back-btn" data-back>戻る</button>
+      <h2>遊び方</h2>
+    </header>
+    <div class="panel narrow howto">
+      <h3>操作方法</h3>
+      <div class="ctrl-grid">
+        <div>
+          <h4>スマホ</h4>
+          <ul>
+            <li>画面左をドラッグで移動</li>
+            <li>右下の赤ボタンをドラッグして離すと狙って攻撃、タップで近い敵へ自動攻撃</li>
+            <li>画面右側のどこからでもドラッグで攻撃できる</li>
+            <li>金色のボタンはスーパー。ゲージが満タンの時に使える</li>
+          </ul>
+        </div>
+        <div>
+          <h4>PC</h4>
+          <ul>
+            <li>WASD／矢印キーで移動</li>
+            <li>マウスで狙ってクリックで攻撃（押しっぱなしで連射）</li>
+            <li>右クリック長押しで範囲を確認して離すとスーパー、E・スペースで即発動</li>
+            <li>Qで近い敵へ自動攻撃、Escで一時停止</li>
+          </ul>
+        </div>
+      </div>
+      <h3>基本ルール</h3>
+      <ul>
+        <li>弾は最大3発。時間で自動リロードされる</li>
+        <li>攻撃を当てるとスーパーゲージが溜まる</li>
+        <li>3秒間攻撃せず被弾もしないと体力が回復する</li>
+        <li>草むらに入ると敵から見えなくなる。ただし攻撃すると一瞬見える</li>
+        <li>スーパーの一部（突進・ビーム・メガボム）は壁や草むらを壊せる</li>
+        <li>勝つとトロフィーが増え、負けると減る。キャラごとに記録される</li>
+      </ul>
+      <h3>モード</h3>
+      <dl class="mode-list">
+        <dt>ジェムラッシュ</dt><dd>中央のジェムを集め、10個以上を15秒守り切れば勝ち</dd>
+        <dt>バウンティ</dt><dd>敵を倒して賞金スターを稼ぐ。2分でスターの多いチームの勝ち</dd>
+        <dt>ボールゴール</dt><dd>ボールを相手ゴールへ。先に2点取ったチームの勝ち</dd>
+        <dt>ソロサバイバル</dt><dd>8人で最後の1人を目指す。箱のパワーキューブで強くなる</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ===== 一時停止 ===== -->
+  <section id="pause" class="overlay">
+    <div class="panel pause-panel">
+      <h2>一時停止</h2>
+      <button class="px-btn play-btn small" id="btnResume">再開する</button>
+      <button class="px-btn danger" id="btnRetire">リタイア（敗北扱い）</button>
+    </div>
+  </section>
+
+  <!-- ===== リザルト ===== -->
+  <section id="result" class="screen">
+    <div class="panel result-panel">
+      <div class="res-title" id="resTitle">勝利！</div>
+      <div class="res-sub" id="resSub"></div>
+      <div class="res-trophy" id="resTrophy"></div>
+      <div class="res-table" id="resTable"></div>
+      <div class="res-stats" id="resStats"></div>
+      <div class="res-actions">
+        <button class="px-btn menu-btn" id="btnHome"><span class="mb-text"><b>ホームへ</b></span></button>
+        <button class="px-btn play-btn" id="btnAgain">もう一度</button>
+      </div>
+    </div>
+    <footer class="credit">made by <a href="https://github.com/h1ro223" target="_blank" rel="noopener">hiro/ヒロ</a></footer>
+  </section>
+
+  <script src="./script.js"></script>
+</body>
+</html>

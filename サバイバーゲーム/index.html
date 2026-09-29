@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0d0b24">
+<meta name="format-detection" content="telephone=no">
+<meta name="description" content="LUMINA FALL -光墜のサバイバー- 魔物の大群を生き延びるローグライト・サバイバーアクション。made by hiro/ヒロ">
+<title>LUMINA FALL -光墜のサバイバー- | made by hiro/ヒロ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="game"></canvas>
+
+  <!-- HUD -->
+  <div id="hud" class="hide">
+    <div id="xpbar"><i id="xpfill"></i><b id="lvtxt">Lv 1</b></div>
+    <div id="hudrow">
+      <div id="hudL">
+        <div id="hpbar"><i id="hpfill"></i><b id="hptxt">100 / 100</b></div>
+        <div id="slots"></div>
+      </div>
+      <div id="hudC"><div id="timer">00:00</div><div id="stagetag"></div></div>
+      <div id="hudR">
+        <div class="hstat"><span>☠</span><b id="killtxt">0</b></div>
+        <div class="hstat gold"><span>✦</span><b id="cointxt">0</b></div>
+        <button id="btnPause" aria-label="ポーズ"><i></i><i></i></button>
+      </div>
+    </div>
+    <div id="bossbar" class="hide"><div id="bossname"></div><div id="bosstrack"><i id="bossfill"></i></div></div>
+    <div id="ctrl">
+      <button id="btnUlt" class="cbtn ult" aria-label="必殺技"><span class="cl">必殺</span><span class="ck">E</span></button>
+      <button id="btnDash" class="cbtn dash" aria-label="ダッシュ"><span class="cl">ダッシュ</span><span class="ck">Space</span></button>
+    </div>
+    <div id="tut" class="hide"></div>
+  </div>
+  <div id="fps" class="hide"></div>
+  <div id="toasts"></div>
+  <div id="bigtoast"></div>
+
+  <!-- タイトル -->
+  <section id="scrTitle" class="scr hide">
+    <div class="titleWrap">
+      <h1 class="logo"><span class="logoMain">LUMINA<br>FALL</span><span class="logoSub">光墜のサバイバー</span></h1>
+      <nav class="menu">
+        <button class="mbtn prime" data-go="prep">出撃する</button>
+        <button class="mbtn" data-go="daily">デイリー挑戦<span class="tag" id="dailyTag"></span></button>
+        <button class="mbtn" data-go="shop">永続強化</button>
+        <button class="mbtn" data-go="codex">図鑑</button>
+        <button class="mbtn" data-go="ach">実績<span class="tag dim" id="achTag"></span></button>
+        <button class="mbtn" data-go="stats">戦績</button>
+        <button class="mbtn" data-go="settings">設定</button>
+        <button class="mbtn" data-go="help">遊び方</button>
+      </nav>
+      <div class="shardBox">所持している星片 <b>✦ <span class="shardsVal">0</span></b></div>
+    </div>
+    <a class="credit" href="https://github.com/h1ro223" target="_blank" rel="noopener">made by hiro/ヒロ</a>
+  </section>
+
+  <section id="scrPrep" class="scr page hide">
+    <header class="phead"><button class="back" data-go="title">戻る</button><h2>出撃準備</h2><div class="shardMini">✦ <span class="shardsVal">0</span></div></header>
+    <div class="pbody" id="prepBody"></div>
+    <footer class="pfoot"><button id="btnStart" class="mbtn prime">出撃する</button></footer>
+  </section>
+  <section id="scrDaily" class="scr page hide">
+    <header class="phead"><button class="back" data-go="title">戻る</button><h2>デイリー挑戦</h2><div class="shardMini">✦ <span class="shardsVal">0</span></div></header>
+    <div class="pbody" id="dailyBody"></div>
+    <footer class="pfoot"><button id="btnDailyStart" class="mbtn prime">挑戦する</button></footer>
+  </section>
+  <section id="scrShop" class="scr page hide">
+    <header class="phead"><button class="back" data-go="title">戻る</button><h2>永続強化</h2><div class="shardMini">✦ <span class="shardsVal">0</span></div></header>
+    <div class="pbody" id="shopBody"></div>
+  </section>
+  <section id="scrCodex" class="scr page hide">
+    <header class="phead"><button class="back" data-go="title">戻る</button><h2>図鑑</h2></header>
+    <div class="pbody" id="codexBody"></div>
+  </section>
+  <section id="scrAch" class="scr page hide">
+    <header class="phead"><button class="back" data-go="title">戻る</button><h2>実績</h2></header>
+    <div class="pbody" id="achBody"></div>
+  </section>
+  <section id="scrStats" class="scr page hide">
+    <header class="phead"><button class="back" data-go="title">戻る</button><h2>戦績</h2></header>
+    <div class="pbody" id="statsBody"></div>
+  </section>
+  <section id="scrSettings" class="scr page hide">
+    <header class="phead"><button class="back" data-go="title">戻る</button><h2>設定</h2></header>
+    <div class="pbody" id="settingsBody"></div>
+  </section>
+  <section id="scrHelp" class="scr page hide">
+    <header class="phead"><button class="back" data-go="title">戻る</button><h2>遊び方</h2></header>
+    <div class="pbody" id="helpBody"></div>
+  </section>
+
+  <!-- オーバーレイ -->
+  <div id="ovLevel" class="ov hide"><div class="ovPanel lv" id="ovLevelIn"></div></div>
+  <div id="ovChest" class="ov hide"><div class="ovPanel chest" id="ovChestIn"></div></div>
+  <div id="ovPause" class="ov hide"><div class="ovPanel" id="ovPauseIn"></div></div>
+  <div id="ovClear" class="ov hide"><div class="ovPanel clear" id="ovClearIn"></div></div>
+  <div id="ovResult" class="ov hide"><div class="ovPanel" id="ovResultIn"></div></div>
+  <div id="ovConfirm" class="ov hide"><div class="ovPanel small" id="ovConfirmIn"></div></div>
+</div>
+<script src="./script.js"></script>
+</body>
+</html>

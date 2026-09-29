@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#101a36">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<meta name="description" content="KNOCKOUT ROAD ～拳闘伝説～ ルーキーから世界の頂点へ。見切って、かわして、カウンターで倒せ！ made by hiro/ヒロ">
+<title>KNOCKOUT ROAD ～拳闘伝説～</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=M+PLUS+Rounded+1c:wght@500;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== タイトル ===== -->
+  <section id="scr-title" class="scr on">
+    <canvas id="titleCv" width="480" height="560" aria-hidden="true"></canvas>
+    <div class="title-wrap">
+      <h1 class="logo">
+        <span class="l1">KNOCKOUT</span>
+        <span class="l2">ROAD</span>
+        <span class="l3">～拳闘伝説～</span>
+      </h1>
+      <div id="titleBtns" class="title-btns"></div>
+      <p class="press">浪速拳闘会 PRESENTS</p>
+    </div>
+    <a class="credit" href="https://github.com/h1ro223" target="_blank" rel="noopener">made by hiro/ヒロ</a>
+  </section>
+
+  <!-- ===== キャリア拠点（ジム） ===== -->
+  <section id="scr-hub" class="scr"></section>
+
+  <!-- ===== 汎用メニュー ===== -->
+  <section id="scr-menu" class="scr">
+    <header class="mhead">
+      <button class="back" data-cmd="back" type="button">◀ もどる</button>
+      <h2 id="menuTitle"></h2>
+      <div id="menuMeta" class="mmeta"></div>
+    </header>
+    <div id="menuBody" class="mbody"></div>
+    <a class="credit credit-menu" href="https://github.com/h1ro223" target="_blank" rel="noopener">made by hiro/ヒロ</a>
+  </section>
+
+  <!-- ===== VS / ストーリー / リザルト ===== -->
+  <section id="scr-vs" class="scr"></section>
+  <section id="scr-story" class="scr"></section>
+  <section id="scr-result" class="scr"></section>
+
+  <!-- ===== 試合・トレーニング ===== -->
+  <section id="scr-game" class="scr">
+    <div id="canvasBox"><canvas id="cv" aria-label="ゲーム画面"></canvas>
+      <button id="btnPause" type="button" aria-label="ポーズ">II</button>
+    </div>
+    <div id="pad">
+      <div class="cross">
+        <button class="pb pb-guard" data-act="guard" type="button"><b>▲</b><i>ガード</i></button>
+        <button class="pb pb-dl" data-act="dL" type="button"><b>◀</b><i>回避</i></button>
+        <button class="pb pb-dr" data-act="dR" type="button"><b>▶</b><i>回避</i></button>
+        <button class="pb pb-duck" data-act="duck" type="button"><b>▼</b><i>ダッキング</i></button>
+      </div>
+      <div class="atk">
+        <button class="pb pb-lf" data-act="lf" type="button"><b>左</b><i>顔</i></button>
+        <button class="pb pb-rf" data-act="rf" type="button"><b>右</b><i>顔</i></button>
+        <button class="pb pb-lb" data-act="lb" type="button"><b>左</b><i>ボディ</i></button>
+        <button class="pb pb-rb" data-act="rb" type="button"><b>右</b><i>ボディ</i></button>
+        <button class="pb pb-star" data-act="star" type="button"><b>★</b><i>スターパンチ</i></button>
+      </div>
+    </div>
+  </section>
+
+  <div id="modal" class="modal"><div class="mbox" id="mbox"></div></div>
+  <div id="toast"></div>
+</div>
+<!-- KNOCKOUT ROAD ～拳闘伝説～ made by hiro/ヒロ https://github.com/h1ro223 -->
+<script src="./script.js"></script>
+</body>
+</html>
